@@ -1,0 +1,16 @@
+# anytime we are using required we need to have super user permissions
+sudo: required
+
+# automatically install docker into the travis container (we need a copy of docker ready to go)
+services:
+  - docker
+
+# series of commands or steps that happen before we run our tests
+# in our case we want to build our docker image before our tests run
+# . use the current directory for context
+before_install:
+  - docker build -t hd719/docker-react -f Dockerfile.dev .
+
+# Commands needed to run our test suite
+script:
+  - docker run -e CI=true hd719/docker-react npm run test

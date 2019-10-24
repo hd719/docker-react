@@ -14,4 +14,5 @@ RUN yarn run build
 FROM nginx
 
 # copies over from another phase
+# copies over our /app/build directory into the html directory
 COPY --from=builder /app/build /usr/share/nginx/html
