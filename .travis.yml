@@ -14,3 +14,21 @@ before_install:
 # Commands needed to run our test suite
 script:
   - docker run -e CI=true hd719/docker-react npm run test
+
+# Exactly how to deploy our application to AWS
+deploy:
+  provider: elasticbeanstalk # telling travis to use elasticbeanstalk for deployment
+  region: "us-east-2" # this comes from the url of our app from AWS
+  app: "docker-react" # name of the app
+  env: "DockerReact-env" # Env where our app is running
+  # travis will take all the files in our repository and zip them up into 1 single file and then copy it into Amazon s3 bucket (hardrive running on AWS)
+  # when you create the env for the app a s3 bucket is already created for you
+  bucket_name: "elasticbeanstalk-us-east-2-234599825231"
+  bucket_path: "docker-react"
+  on:
+    branch: master
+    # means anytime we push code to master then run the `deploy` script
+  access_key_id:
+    secure: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: $AWS_SECRET_KEY
